@@ -4,7 +4,7 @@
  *
  * Autor: María Eugenia Herrera Cifuentes
  * Descripción: Implementación completa de un BST que almacena enteros con los
- * métodos de inserción, búsqueda, eliminación y tres tipos de recorrido.
+ *              métodos de inserción, búsqueda, eliminación y tres tipos de recorrido.
  */
 public class BinarySearchTree {
 
@@ -35,10 +35,10 @@ public class BinarySearchTree {
     // =========================================================================
     // MÉTODO 1: INSERCIÓN
     // Inserta un nuevo valor respetando las reglas del BST:
-    // - Menores que el nodo actual van a la izquierda
-    // - Mayores van a la derecha
+    //   - Menores que el nodo actual van a la izquierda
+    //   - Mayores van a la derecha
     // Complejidad: O(h), donde h es la altura del árbol.
-    // En el mejor caso O(log n), en el peor O(n).
+    //              En el mejor caso O(log n), en el peor O(n).
     // =========================================================================
     public void insert(int value) {
         root = insertRecursive(root, value);
@@ -95,10 +95,10 @@ public class BinarySearchTree {
     // =========================================================================
     // MÉTODO 3: ELIMINACIÓN
     // Contempla los tres casos críticos:
-    // CASO 1: Nodo hoja (sin hijos) → se elimina directamente.
-    // CASO 2: Nodo con un solo hijo → el padre apunta al hijo del eliminado.
-    // CASO 3: Nodo con dos hijos → se reemplaza por su sucesor in-order
-    // (el menor valor del subárbol derecho), luego se elimina ese sucesor.
+    //   CASO 1: Nodo hoja (sin hijos) → se elimina directamente.
+    //   CASO 2: Nodo con un solo hijo → el padre apunta al hijo del eliminado.
+    //   CASO 3: Nodo con dos hijos → se reemplaza por su sucesor in-order
+    //           (el menor valor del subárbol derecho), luego se elimina ese sucesor.
     // Complejidad: O(h).
     // =========================================================================
     public void delete(int value) {
@@ -133,14 +133,13 @@ public class BinarySearchTree {
                 return current.right; // Sustituimos por su hijo derecho
             }
             if (current.right == null) {
-                return current.left; // Sustituimos por su hijo izquierdo
+                return current.left;  // Sustituimos por su hijo izquierdo
             }
 
             // --- CASO 3: Nodo con DOS hijos ---
             // Estrategia: encontrar el sucesor in-order (el menor del subárbol derecho)
             // El sucesor es el valor más pequeño que es mayor que el nodo actual,
-            // garantizando que el árbol siga siendo un BST válido después de la
-            // sustitución.
+            // garantizando que el árbol siga siendo un BST válido después de la sustitución.
             int successorValue = findMinValue(current.right);
             current.value = successorValue; // Reemplazamos el valor
             // Eliminamos el sucesor de su posición original (siempre será Caso 1 o 2)
@@ -150,8 +149,7 @@ public class BinarySearchTree {
         return current;
     }
 
-    // Método auxiliar: encuentra el valor mínimo de un subárbol (el más a la
-    // izquierda)
+    // Método auxiliar: encuentra el valor mínimo de un subárbol (el más a la izquierda)
     private int findMinValue(Node node) {
         while (node.left != null) {
             node = node.left;
@@ -226,76 +224,80 @@ public class BinarySearchTree {
     private void printTreeRecursive(Node current, String prefix, boolean isLeft) {
         if (current != null) {
             System.out.println(prefix + (isLeft ? "├── " : "└── ") + current.value);
-            printTreeRecursive(current.left, prefix + (isLeft ? "│   " : "    "), true);
+            printTreeRecursive(current.left,  prefix + (isLeft ? "│   " : "    "), true);
             printTreeRecursive(current.right, prefix + (isLeft ? "│   " : "    "), false);
         }
     }
 
     // =========================================================================
-    // MAIN: Demostración completa para el video de sustentación
+    // MAIN: Menú interactivo
     // =========================================================================
     public static void main(String[] args) {
         BinarySearchTree bst = new BinarySearchTree();
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        int opcion;
 
         System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║   Árbol Binario de Búsqueda - Demo   ║");
-        System.out.println("╚══════════════════════════════════════╝\n");
-
-        // --- Inserción de 6 valores ---
-        System.out.println(">>> Insertando valores: 50, 30, 70, 20, 40, 60");
-        bst.insert(50);
-        bst.insert(30);
-        bst.insert(70);
-        bst.insert(20);
-        bst.insert(40);
-        bst.insert(60);
-        bst.printTree();
-
-        // --- Recorridos ---
-        System.out.println(">>> Recorridos del árbol:");
-        bst.inOrder();
-        bst.preOrder();
-        bst.postOrder();
-        System.out.println();
-
-        // --- Búsquedas ---
-        System.out.println(">>> Búsquedas:");
-        System.out.println("¿Existe 40? → " + bst.search(40)); // true
-        System.out.println("¿Existe 99? → " + bst.search(99)); // false
-        System.out.println();
-
-        // --- Eliminaciones (los 3 casos) ---
-        System.out.println(">>> CASO 1: Eliminar 20 (nodo hoja, sin hijos)");
-        bst.delete(20);
-        bst.printTree();
-        bst.inOrder();
-
-        System.out.println(">>> CASO 2: Eliminar 60 (nodo con un solo hijo)");
-        bst.insert(65); // Agregamos un hijo a 60 para el demo
-        System.out.println("    (Insertamos 65 como hijo de 60 para preparar el caso)");
-        bst.printTree();
-        bst.delete(60);
-        System.out.println("    → Después de eliminar 60:");
-        bst.printTree();
-        bst.inOrder();
-
-        System.out.println(">>> CASO 3: Eliminar 30 (nodo con dos hijos: 40 en izquierda)");
-        bst.insert(35); // Para asegurarnos que 30 tiene dos hijos
-        System.out.println("    (Insertamos 35 para asegurar dos hijos en 30)");
-        bst.printTree();
-        bst.delete(30);
-        System.out.println("    → Después de eliminar 30 (reemplazado por sucesor in-order):");
-        bst.printTree();
-        bst.inOrder();
-
-        System.out.println("\n╔══════════════════════════════════════╗");
-        System.out.println("║   Complejidad Big-O del método Search ║");
-        System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║  Mejor caso:  O(log n) - árbol        ║");
-        System.out.println("║               balanceado               ║");
-        System.out.println("║  Peor caso:   O(n) - árbol degenerado ║");
-        System.out.println("║               (lista enlazada)         ║");
-        System.out.println("║  Caso prom.:  O(log n)                 ║");
+        System.out.println("║   Árbol Binario de Búsqueda - Java   ║");
         System.out.println("╚══════════════════════════════════════╝");
+
+        do {
+            System.out.println("\n--- MENÚ ---");
+            System.out.println("1. Insertar valor");
+            System.out.println("2. Buscar valor");
+            System.out.println("3. Eliminar valor");
+            System.out.println("4. Mostrar árbol");
+            System.out.println("5. Recorridos (In-Order, Pre-Order, Post-Order)");
+            System.out.println("0. Salir");
+            System.out.print("Elige una opcion: ");
+
+            opcion = scanner.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Valor a insertar: ");
+                    int valIns = scanner.nextInt();
+                    bst.insert(valIns);
+                    System.out.println("✓ Valor " + valIns + " insertado.");
+                    bst.printTree();
+                    break;
+
+                case 2:
+                    System.out.print("Valor a buscar: ");
+                    int valBus = scanner.nextInt();
+                    boolean encontrado = bst.search(valBus);
+                    System.out.println(encontrado
+                        ? "✓ El valor " + valBus + " SÍ existe en el árbol."
+                        : "✗ El valor " + valBus + " NO existe en el árbol.");
+                    break;
+
+                case 3:
+                    System.out.print("Valor a eliminar: ");
+                    int valDel = scanner.nextInt();
+                    bst.delete(valDel);
+                    bst.printTree();
+                    break;
+
+                case 4:
+                    bst.printTree();
+                    break;
+
+                case 5:
+                    bst.inOrder();
+                    bst.preOrder();
+                    bst.postOrder();
+                    break;
+
+                case 0:
+                    System.out.println("¡Hasta luego!");
+                    break;
+
+                default:
+                    System.out.println("Opción no válida. Intenta de nuevo.");
+            }
+
+        } while (opcion != 0);
+
+        scanner.close();
     }
 }
